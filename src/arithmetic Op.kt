@@ -35,6 +35,22 @@ fun main(args: Array<String>) {
 
     var car1=Car("rolls royce",300.0)
     car1.getInfoCar()
+
+    var mob = Mobile()
+    println(mob.toString())
+
+    val circle1 : Circle =Circle(7.0)  //early binding as type inference is already of child class
+    val rectangle1: Rectangle=Rectangle(3.0, 4.0)    //early binding as type inference is already of child class
+    println(circle1.area())
+    println(rectangle1.area())
+
+    val circle2 : Shape = Circle(9.0)    //Late binding as reference is given of parent class,in runtime it will decide to choose which child
+    val shapes : Array<Shape> = arrayOf(Circle(3.0),Rectangle(5.0,7.0),circle2,circle1)//type inference of Array is Shape so Late Binding
+    areaOfShapes(shapes)
+
+    val games : Array<Game> = arrayOf(Kabaddi(),KhoKho())
+    gamesInfo(games)
+
 }
 
 //---------------------------------------------------------------------
@@ -157,5 +173,68 @@ class Car(name: String, speed: Double) {
     }
 }
 
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------- ANY CLASS METHODS
 
+class Mobile (){
+    override fun toString(): String {
+        return super.toString()
+    }
+}
+
+//-------------------------------------------------------------------- Polymorphism (Early and Late Binding)
+
+open class Shape {
+    open fun area(): Double{
+        return 0.0
+    }
+}
+
+class Circle(val rad:Double) : Shape(){
+    override fun area(): Double{
+        return Math.PI * rad * rad
+    }
+}
+
+class Rectangle(val l:Double,val b:Double) : Shape(){
+    override fun area(): Double{
+        return l * b
+    }
+}
+
+fun areaOfShapes(shapes : Array<Shape>) {
+    for(shape : Shape in shapes){
+        println(shape.area())
+    }
+}
+
+//------------------------------------------------------------------- Abstract class and methods
+
+abstract class Game{
+    abstract val name : String
+    abstract fun rules() : String
+}   //properties and methods is not defined properly but done in child class i.e, Abstract class
+
+class Kabaddi : Game(){
+    override val name = "kabaddi"
+
+    override fun rules(): String {
+        val rule :String = "max players in court 6"
+        return rule
+    }
+}
+
+class KhoKho : Game(){
+    override val name = "khoKho"
+    override fun rules(): String {
+        val rule :String = "max players in court 9"
+        return rule
+    }
+}
+
+fun gamesInfo(games : Array<Game>){
+    for (game : Game in games){
+        println(game.rules())
+    }
+}
+
+//------------------------------------------------------------------
