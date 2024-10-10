@@ -1,3 +1,4 @@
+import com.sun.jdi.Value
 import java.lang.classfile.constantpool.DoubleEntry
 import kotlin.math.pow
 
@@ -50,6 +51,21 @@ fun main(args: Array<String>) {
 
     val games : Array<Game> = arrayOf(Kabaddi(),KhoKho())
     gamesInfo(games)
+
+    val objects: Array<Drawable> = arrayOf(Painting("monalisa"),Painting("Picasso"),Drawer())
+    allDrawableObj(objects)
+
+    var objA =A()
+    var objB =B()
+    println(objB.print())
+
+    var generic= generic1<Int>(5)
+    generic.SetValue(10)
+    println(generic.GetValue())
+
+    var varArg = generalAddition<Long>(3000000,700000)
+    println(varArg.Calculation())
+    println(varArg.Vararguments(1,2,3,4,5,6,7,8,9,10))
 
 }
 
@@ -237,4 +253,69 @@ fun gamesInfo(games : Array<Game>){
     }
 }
 
-//------------------------------------------------------------------
+//------------------------------------------------------------------ Interface
+
+interface Drawable{
+    fun draw()
+}
+
+class Painting(val name : String) : Drawable {
+    override fun draw(){
+        println("$name is Drawable")
+    }
+}
+
+class Drawer() : Drawable {
+    override fun draw() {
+        println("Drawer is drawable")
+    }
+}
+
+fun allDrawableObj(objects : Array<Drawable>){
+    for(obj : Drawable in objects){
+        println(obj.draw())
+    }
+}
+
+//--------------------------------------------------------------- Visibility Modifiers
+
+ open class A{
+     public var p = 10
+     internal var q = 20
+     private var r = 30
+     protected var s = 40
+ }
+
+class B : A(){
+     fun print(){
+        println("$p $q $s")
+    }
+}    //except for r everything is accesible
+
+//--------------------------------------------------------------- Vararg and generic classes
+
+class generic1<T>(var data : T){
+    fun SetValue(value : T){
+        data = value
+    }
+
+    fun GetValue(): T{
+        return data
+    }
+} //Generic
+
+class generalAddition<T : Number>(val a: T, val b: T) {
+
+    fun Calculation() : Double {
+        return a.toDouble() + b.toDouble()
+    }
+
+    fun Vararguments(vararg  numbers: Int) : Int {
+        var sum = 0
+        for(num in numbers){
+            sum += num
+        }
+        return sum
+    }
+} //generic with Restriction and var arguments
+
